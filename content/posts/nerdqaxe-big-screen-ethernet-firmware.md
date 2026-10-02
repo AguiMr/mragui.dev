@@ -54,9 +54,30 @@ By default the W5500's interrupt (INT) and reset (RST) pins aren't connected. Th
 
 I did test interrupt mode: with **INT wired to GPIO11** and the firmware built with `W5500_USE_INT=1`, it works and boots cleanly. But on a hand-wired add-on board, the interrupt wire picks up enough electrical noise that it performed *worse* than polling, with more delay and jitter. Either way it makes no difference to mining, so the default build polls.
 
-## Building
+## Installing it
 
-The repo uses a Docker toolchain, so you don't need ESP-IDF or Node installed. It's pinned to ESP-IDF 5.3.3, because newer 5.3.x versions currently run out of fast internal memory (IRAM) on the 480×320 build.
+You don't need to build anything. Every [release](https://github.com/AguiMr/nerdqaxe-bigscreen/releases) comes with ready-to-flash files:
+
+- `esp-miner-factory-NerdQAxe++-<version>.bin`: the full image, for the first install over USB.
+- `esp-miner-NerdQAxe++.bin` and `www.bin`: the firmware and web UI, for updates later on.
+
+It isn't on shufps's Webflasher, which only has the main firmware without 480×320 support. Use the files from this repo's releases.
+
+### First install: over USB
+
+The bigger screen's graphics need more space, so the flash layout (partition table) is different from stock: the app partitions are bigger and the web UI partition is smaller. An over-the-air update can't change the layout, so the first install has to be over USB. Hold the `boot` button to put the miner in bootloader mode, then flash the full image:
+
+```bash
+esptool.py --chip esp32s3 -p /dev/ttyACM0 write_flash 0x0 esp-miner-factory-NerdQAxe++-<version>.bin
+```
+
+### Updates: from the web UI
+
+After that, you never need the cable again. In the miner's web UI, go to **Settings → Update via GitHub** and pick the latest release. Your pool and overclock settings are kept. You can also upload `esp-miner-NerdQAxe++.bin` and `www.bin` by hand.
+
+### Building it yourself
+
+If you'd rather compile it, the repo has a Docker toolchain, so you don't need ESP-IDF or Node installed. It's pinned to ESP-IDF 5.3.3, because newer 5.3.x versions currently run out of fast internal memory (IRAM) on the 480×320 build.
 
 ```bash
 # first time only
@@ -70,27 +91,7 @@ export BIGSCREEN=1          # turns on the 480x320 display code
 ./docker/idf.sh build
 ```
 
-That gives you `build/esp-miner.bin` (the firmware) and `build/www.bin` (the web UI).
-
-## Flashing
-
-This build **isn't** on shufps's Webflasher or releases page. Those don't include 480×320 support, so flash the files you built yourself.
-
-**The first flash must be over USB.** The bigger screen's graphics need more space, so the flash layout (partition table) is different from stock: the app partitions are bigger and the web UI partition is smaller. An over-the-air update can't change the layout. Put the miner in bootloader mode with the `boot` button if needed, then do a full flash:
-
-```bash
-./docker/idf-shell.sh
-idf.py -p /dev/ttyACM0 flash
-```
-
-Or build a single combined image and flash it with `bitaxetool`. First copy `config.cvs.example` to `config.cvs` and fill in your pool and Wi‑Fi details:
-
-```bash
-./merge_bin.sh nerdqaxe+.bin
-./docker/bitaxetool.sh --config config.cvs --firmware esp-miner-factory-nerdqaxe+.bin -p /dev/ttyACM0
-```
-
-**After that, you can update from the web UI** (Settings → firmware upload) with `build/esp-miner.bin` and `build/www.bin`. Your pool and overclock settings are kept.
+That gives you `build/esp-miner.bin` and `build/www.bin`. For a first install from your own build, run `idf.py -p /dev/ttyACM0 flash` inside `./docker/idf-shell.sh`.
 
 ## Credits
 
