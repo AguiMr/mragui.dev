@@ -1,7 +1,8 @@
 {{ define "main" }}
 <section class="intro">
-  <h1>Hi, I'm MrAgui.</h1>
-  <p>{{ site.Params.description }} This is where I write up the things I build for fun: custom firmware, home crypto-mining rigs, and tools I've ported along the way.</p>
+  <h1>Hello.</h1>
+  {{/* Same text as the About page, so the two never drift apart */}}
+  {{ with site.GetPage "/about" }}{{ .Content }}{{ end }}
 </section>
 
 <h2>Latest posts</h2>
