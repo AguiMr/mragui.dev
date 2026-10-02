@@ -16,7 +16,7 @@ The open NerdQAxe+ firmware that the rest of the community runs, [shufps/ESP-Min
 
 ## The fix: a clean build from open source
 
-**[nerdqaxeplus2-lan-480x320](https://github.com/AguiMr/nerdqaxeplus2-lan-480x320)** is built from the open shufps firmware and follows its `develop` branch, so you know exactly what's running on your miner. It adds two things:
+**[nerdqaxe-bigscreen](https://github.com/AguiMr/nerdqaxe-bigscreen)** is built from the open shufps firmware and follows its `develop` branch, so you know exactly what's running on your miner. It adds two things:
 
 1. **480×320 display support.** The big-screen code is ported from [brunneis/nerdqaxeplus2-3.5-inches](https://github.com/brunneis/nerdqaxeplus2-3.5-inches). Since the main firmware won't take it, it's maintained in this fork.
 2. **Optional W5500 Ethernet.** Wired networking if you want it. Without the Ethernet board, the miner runs on Wi‑Fi like stock.
