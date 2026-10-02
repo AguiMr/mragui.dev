@@ -26,5 +26,9 @@
     <a href="{{ site.Params.github }}">GitHub</a>
     <a href="{{ "index.xml" | relURL }}">RSS</a>
   </footer>
+  {{ if hugo.IsProduction }}
+  <!-- Cloudflare Web Analytics (live site only, not hugo server) -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bd00560c73dd444d9317fe26fbf558c7"}'></script>
+  {{ end }}
 </body>
 </html>
