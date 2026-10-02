@@ -1,0 +1,18 @@
+{{ define "main" }}
+<section class="intro">
+  <h1>Hi, I'm MrAgui.</h1>
+  <p>{{ site.Params.description }} This is where I write up the things I build for fun: custom firmware, home crypto-mining rigs, and tools I've ported along the way.</p>
+</section>
+
+<h2>Latest posts</h2>
+<ul class="post-list">
+  {{ range first 10 (where site.RegularPages "Section" "posts") }}
+  <li>
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time>
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+  </li>
+  {{ else }}
+  <li>No posts yet.</li>
+  {{ end }}
+</ul>
+{{ end }}
