@@ -1,0 +1,61 @@
+{{ define "main" }}
+{{ $isPost := eq .Section "posts" }}
+<article class="{{ if $isPost }}post{{ else }}page{{ end }}">
+  <header class="article-head">
+    {{ if $isPost }}
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ "/" | relURL }}">Home</a> / <a href="{{ "posts/" | relURL }}">Posts</a></nav>
+    {{ end }}
+    <h1>{{ .Title }}</h1>
+    {{ if $isPost }}
+    {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
+    <p class="meta">
+      <span>By <a href="{{ "about/" | relURL }}" rel="author">{{ site.Params.author.name }}</a></span>
+      · <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+      {{ if gt (.Lastmod.Sub .Date).Hours 24 }}· <span>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "2 Jan 2006" }}</time></span>{{ end }}
+      · {{ .ReadingTime }} min read
+    </p>
+    {{ with .GetTerms "tags" }}
+    <ul class="tags" aria-label="Tags">
+      {{ range . }}<li><a href="{{ .RelPermalink }}">#{{ .LinkTitle | lower }}</a></li>{{ end }}
+    </ul>
+    {{ end }}
+    {{ end }}
+  </header>
+
+  {{ if and $isPost (gt .WordCount 700) (gt (len (findRE "<h2" .Content)) 2) }}
+  <details class="toc">
+    <summary>On this page</summary>
+    {{ .TableOfContents }}
+  </details>
+  {{ end }}
+
+  <div class="prose">
+    {{ .Content }}
+  </div>
+
+  {{ if $isPost }}
+  <footer class="article-foot">
+    <div class="author-card">
+      <img src="{{ "images/brand/logo-round-192.webp" | relURL }}" width="64" height="64" alt="" loading="lazy">
+      <div>
+        <p><strong>Written by {{ site.Params.author.name }}</strong>. I write up hobby projects (home Bitcoin miners, solar, electronics, coding with AI) in case they save someone else a few evenings.</p>
+        <p class="small">Questions or corrections? Find me on <a href="{{ site.Params.github }}">GitHub</a> or <a href="{{ site.Params.reddit }}">Reddit</a>. New posts land in the <a href="{{ "index.xml" | relURL }}">RSS feed</a>.</p>
+      </div>
+    </div>
+
+    {{ $related := .Site.RegularPages.Related . | first 3 }}
+    {{ with $related }}
+    <section class="related" aria-labelledby="related">
+      <h2 id="related">Related posts</h2>
+      {{ partial "post-list.html" . }}
+    </section>
+    {{ end }}
+
+    <nav class="prev-next" aria-label="More posts">
+      {{ with .NextInSection }}<a class="prev" href="{{ .RelPermalink }}"><span>← Newer</span>{{ .Title }}</a>{{ end }}
+      {{ with .PrevInSection }}<a class="next" href="{{ .RelPermalink }}"><span>Older →</span>{{ .Title }}</a>{{ end }}
+    </nav>
+  </footer>
+  {{ end }}
+</article>
+{{ end }}

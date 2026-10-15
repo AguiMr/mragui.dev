@@ -1,0 +1,32 @@
+{{ define "main" }}
+<section class="hero">
+  <img class="hero-logo" src="{{ "images/brand/logo-round-480.webp" | relURL }}"
+       srcset="{{ "images/brand/logo-round-192.webp" | relURL }} 192w, {{ "images/brand/logo-round-480.webp" | relURL }} 480w"
+       sizes="(max-width: 600px) 160px, 220px"
+       width="220" height="220" alt="MrAgui logo: ink mountains and a gold river inside an ensō circle" fetchpriority="high">
+  <div class="hero-text">
+    <p class="eyebrow">mragui.dev</p>
+    <h1>Notes from the workbench.</h1>
+    {{/* Same text as the About page, so the two never drift apart */}}
+    {{ with site.GetPage "/about" }}<div class="hero-intro">{{ .Content }}</div>{{ end }}
+  </div>
+</section>
+
+{{ $posts := where site.RegularPages "Section" "posts" }}
+<section aria-labelledby="latest">
+  <div class="section-head">
+    <h2 id="latest">Latest posts</h2>
+    <a href="{{ "posts/" | relURL }}">All posts →</a>
+  </div>
+  {{ partial "post-list.html" (first 10 $posts) }}
+</section>
+
+{{ with site.Taxonomies.tags }}
+<section aria-labelledby="topics">
+  <div class="section-head"><h2 id="topics">Topics</h2></div>
+  <ul class="tag-cloud">
+    {{ range .ByCount }}<li><a href="{{ .Page.RelPermalink }}">#{{ .Page.Title | lower }}<span>{{ .Count }}</span></a></li>{{ end }}
+  </ul>
+</section>
+{{ end }}
+{{ end }}

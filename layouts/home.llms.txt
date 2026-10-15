@@ -1,0 +1,22 @@
+{{- $posts := where site.RegularPages "Section" "posts" -}}
+# {{ site.Title }}
+
+> {{ site.Params.description }}
+
+{{ site.Title }} (mragui.dev) is a personal blog of hands-on write-ups: open firmware for home Bitcoin miners (NerdQAxe++, Bitaxe, ESP32), solar inverters and Home Assistant over Modbus, electronics tools on macOS, and other DIY projects. Posts are first-hand: exact steps, commands, register addresses and wiring for things I actually built and ran. Every page is also available as plain Markdown at the same URL with `index.md` appended.
+
+## Posts
+{{ range $posts }}
+- [{{ .Title }}]({{ with .OutputFormats.Get "markdown" }}{{ .Permalink }}{{ end }}): {{ with .Description }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 200 }}{{ end }} ({{ .Date.Format "2006-01-02" }})
+{{- end }}
+
+## Pages
+{{ range where site.RegularPages "Section" "" }}
+- [{{ .Title }}]({{ with .OutputFormats.Get "markdown" }}{{ .Permalink }}{{ end }}){{ with .Description }}: {{ . }}{{ end }}
+{{- end }}
+
+## Optional
+
+- [All posts in one file]({{ "llms-full.txt" | absURL }}): full text of every post, for loading into context in one go
+- [RSS feed]({{ "index.xml" | absURL }})
+- [GitHub: {{ path.Base site.Params.github }}]({{ site.Params.github }}): source for the firmware and tools the posts describe

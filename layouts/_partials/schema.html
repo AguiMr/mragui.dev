@@ -1,0 +1,48 @@
+{{- /* JSON-LD structured data: WebSite + Person everywhere, BlogPosting and breadcrumbs on posts. */ -}}
+{{- $p := .page -}}
+{{- $logo := "icon-512.png" | absURL -}}
+{{- $person := dict
+    "@type" "Person"
+    "@id" (printf "%s#person" site.Home.Permalink)
+    "name" site.Params.author.name
+    "url" site.Params.author.url
+    "image" $logo
+    "sameAs" (slice site.Params.github site.Params.reddit) -}}
+{{- $website := dict
+    "@type" "WebSite"
+    "@id" (printf "%s#website" site.Home.Permalink)
+    "url" site.Home.Permalink
+    "name" site.Title
+    "description" site.Params.description
+    "inLanguage" site.Language.Locale
+    "publisher" (dict "@id" (printf "%s#person" site.Home.Permalink)) -}}
+{{- $graph := slice $website $person -}}
+
+{{- if and $p.IsPage (eq $p.Section "posts") -}}
+  {{- $post := dict
+      "@type" "BlogPosting"
+      "@id" (printf "%s#article" $p.Permalink)
+      "mainEntityOfPage" $p.Permalink
+      "headline" $p.Title
+      "description" .desc
+      "image" (dict "@type" "ImageObject" "url" .image.Permalink "width" .image.Width "height" .image.Height)
+      "datePublished" ($p.Date.Format "2006-01-02T15:04:05Z07:00")
+      "dateModified" ($p.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+      "author" (dict "@id" (printf "%s#person" site.Home.Permalink))
+      "publisher" (dict "@id" (printf "%s#person" site.Home.Permalink))
+      "isPartOf" (dict "@id" (printf "%s#website" site.Home.Permalink))
+      "inLanguage" site.Language.Locale
+      "wordCount" $p.WordCount
+      "keywords" (delimit ($p.Params.tags | default slice) ", ") -}}
+  {{- with $p.OutputFormats.Get "markdown" }}{{ $post = merge $post (dict "encoding" (dict "@type" "MediaObject" "encodingFormat" "text/markdown" "contentUrl" .Permalink)) }}{{ end -}}
+  {{- $crumbs := dict
+      "@type" "BreadcrumbList"
+      "itemListElement" (slice
+        (dict "@type" "ListItem" "position" 1 "name" "Home" "item" site.Home.Permalink)
+        (dict "@type" "ListItem" "position" 2 "name" "Posts" "item" (site.GetPage "/posts").Permalink)
+        (dict "@type" "ListItem" "position" 3 "name" $p.Title "item" $p.Permalink)) -}}
+  {{- $graph = $graph | append $post $crumbs -}}
+{{- else if eq $p.RelPermalink "/about/" -}}
+  {{- $graph = $graph | append (dict "@type" "ProfilePage" "url" $p.Permalink "name" $p.Title "mainEntity" (dict "@id" (printf "%s#person" site.Home.Permalink))) -}}
+{{- end }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeJS }}</script>

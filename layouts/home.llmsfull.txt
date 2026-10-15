@@ -1,0 +1,17 @@
+# {{ site.Title }}: full text
+
+> {{ site.Params.description }}
+
+Source: {{ site.Home.Permalink }}. Index: {{ "llms.txt" | absURL }}.
+{{ range where site.RegularPages "Section" "posts" }}
+
+---
+
+{{ partial "page-markdown.md" . }}
+{{ end }}
+{{- range where site.RegularPages "Section" "" }}
+
+---
+
+{{ partial "page-markdown.md" . }}
+{{ end }}

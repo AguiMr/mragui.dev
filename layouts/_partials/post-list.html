@@ -1,0 +1,17 @@
+{{- /* Context: a slice of pages. */ -}}
+<ol class="post-list">
+  {{ range . }}
+  <li class="post-card">
+    <p class="meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 Jan 2006" }}</time> · {{ .ReadingTime }} min read</p>
+    <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+    {{ with .Description }}<p class="summary">{{ . }}</p>{{ end }}
+    {{ with .GetTerms "tags" }}
+    <ul class="tags" aria-label="Tags">
+      {{ range first 4 . }}<li><a href="{{ .RelPermalink }}">#{{ .LinkTitle | lower }}</a></li>{{ end }}
+    </ul>
+    {{ end }}
+  </li>
+  {{ else }}
+  <li>No posts yet.</li>
+  {{ end }}
+</ol>

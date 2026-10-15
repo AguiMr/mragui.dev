@@ -1,0 +1,8 @@
+{{ define "main" }}
+<section class="not-found">
+  <img src="{{ "images/brand/logo-round-192.webp" | relURL }}" width="140" height="140" alt="">
+  <h1>Lost in the mist.</h1>
+  <p class="lede">That page doesn't exist, or it moved.</p>
+  <p><a href="{{ "/" | relURL }}">Back to the homepage</a> or browse <a href="{{ "posts/" | relURL }}">all posts</a>.</p>
+</section>
+{{ end }}

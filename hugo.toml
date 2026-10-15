@@ -1,12 +1,24 @@
 baseURL = "https://mragui.dev/"
-languageCode = "en"
+locale = "en"
 title = "MrAgui"
 enableRobotsTXT = true
+enableGitInfo = true
 ignoreLogs = ["warning-goldmark-raw-html"]
 
 [params]
-  description = "Hardware tinkering, firmware and side projects."
+  description = "Hardware tinkering, firmware and side projects: home Bitcoin miners, solar, electronics, DIY and coding with AI. Write-ups meant to save you a few evenings."
+  tagline = "Hardware tinkering, firmware and side projects"
   github = "https://github.com/AguiMr"
+  reddit = "https://www.reddit.com/user/AguiMr"
+  [params.author]
+    name = "MrAgui"
+    url = "https://mragui.dev/about/"
+
+[taxonomies]
+  tag = "tags"
+
+[frontmatter]
+  lastmod = ["lastmod", ":git", "date"]
 
 [menus]
   [[menus.main]]
@@ -18,13 +30,55 @@ ignoreLogs = ["warning-goldmark-raw-html"]
     pageRef = "/projects"
     weight = 2
   [[menus.main]]
+    name = "Tags"
+    pageRef = "/tags"
+    weight = 3
+  [[menus.main]]
     name = "About"
     pageRef = "/about"
-    weight = 3
+    weight = 4
 
 [markup.highlight]
   style = "github-dark"
   noClasses = true
 
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
+
+[sitemap]
+  changeFreq = "monthly"
+
+[services.rss]
+  limit = 50
+
+# llms.txt (index for LLMs) and llms-full.txt (every post in one file),
+# plus a plain Markdown copy of each page at <page>/index.md.
+[mediaTypes."text/markdown"]
+  suffixes = ["md"]
+
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
+  root = true
+
+[outputFormats.llmsfull]
+  mediaType = "text/plain"
+  baseName = "llms-full"
+  isPlainText = true
+  notAlternative = true
+  root = true
+
+[outputFormats.markdown]
+  mediaType = "text/markdown"
+  baseName = "index"
+  isPlainText = true
+
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "llms", "llmsfull"]
+  page = ["HTML", "markdown"]
+  section = ["HTML", "RSS"]
+  taxonomy = ["HTML"]
+  term = ["HTML", "RSS"]

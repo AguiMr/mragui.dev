@@ -1,5 +1,6 @@
 ---
 title: "About"
+description: "About MrAgui: hobby write-ups on home Bitcoin miners, solar, electronics, DIY, coding with AI and local LLMs. Not related to my day job."
 ---
 
 I'm **MrAgui**. This blog is where I write up hobby projects: small home Bitcoin miners, all sorts of DIY, coding with the help of AI, Local LLMs, you name it.

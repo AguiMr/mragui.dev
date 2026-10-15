@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ "/" | relURL }}" aria-label="{{ site.Title }}, home">
+        <img src="{{ "images/brand/logo-round-96.webp" | relURL }}" width="44" height="44" alt="">
+        <span class="brand-name">{{ site.Title }}</span>
+      </a>
+      <nav aria-label="Main">
+        {{ $current := . }}
+        {{ range site.Menus.main }}
+          {{ $active := or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) (and .Page (eq .Page.Section $current.Section) (ne $current.Section "")) }}
+          <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+        {{ end }}
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="wrap">
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <img src="{{ "images/brand/logo-round-96.webp" | relURL }}" width="36" height="36" alt="" loading="lazy">
+        <div>
+          <strong>{{ site.Title }}</strong>
+          <span>{{ site.Params.tagline }}</span>
+        </div>
+      </div>
+      <nav class="footer-links" aria-label="Elsewhere">
+        <a href="{{ site.Params.github }}" rel="me">GitHub</a>
+        <a href="{{ site.Params.reddit }}" rel="me">Reddit</a>
+        <a href="{{ "index.xml" | relURL }}">RSS</a>
+        <a href="{{ "llms.txt" | relURL }}">llms.txt</a>
+      </nav>
+      <p class="copyright">© {{ now.Year }} {{ site.Title }}</p>
+    </div>
+  </footer>
+  {{ if hugo.IsProduction }}
+  <!-- Cloudflare Web Analytics (live site only, not hugo server) -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bd00560c73dd444d9317fe26fbf558c7"}'></script>
+  {{ end }}
+</body>
+</html>

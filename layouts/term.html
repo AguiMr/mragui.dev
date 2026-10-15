@@ -1,0 +1,8 @@
+{{ define "main" }}
+<header class="list-head">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="{{ "/" | relURL }}">Home</a> / <a href="{{ "tags/" | relURL }}">Tags</a></nav>
+  <h1>#{{ .Title | lower }}</h1>
+  <p class="lede">{{ len .Pages }} {{ cond (eq (len .Pages) 1) "post" "posts" }} tagged “{{ .Title | lower }}”.</p>
+</header>
+{{ partial "post-list.html" .Pages }}
+{{ end }}

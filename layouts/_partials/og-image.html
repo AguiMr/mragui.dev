@@ -1,0 +1,17 @@
+{{/*
+  Social preview image (1200×630), generated at build time: the logo on
+  washi paper with the page title set beside it. Returns an image resource.
+*/}}
+{{- $base := resources.Get "images/og-base.png" -}}
+{{- $font := resources.Get "fonts/ss4-latin-600-normal.ttf" -}}
+{{- $title := cond .IsHome site.Params.tagline .Title -}}
+{{- $size := 52 -}}
+{{- if gt (len $title) 60 }}{{ $size = 44 }}{{ end -}}
+{{- $titleText := images.Text $title (dict
+    "font" $font "color" "#1f1b16" "size" $size "linespacing" 10
+    "x" 630 "y" 150) -}}
+{{- $siteText := images.Text "mragui.dev" (dict
+    "font" $font "color" "#8a5a0b" "size" 30 "x" 630 "y" 520) -}}
+{{- $img := $base | images.Filter $titleText $siteText -}}
+{{- $img = $img.Process "jpg q82" -}}
+{{- return $img -}}
